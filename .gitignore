@@ -1,4 +1,6 @@
-node modules
+k.DS_Store
+__pycache__/
+*.pyc
 .env
-dist
-. DS Store
+venv/
+.venv/
