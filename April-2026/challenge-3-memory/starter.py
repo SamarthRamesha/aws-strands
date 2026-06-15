@@ -11,9 +11,11 @@ Instructions:
 
 import os
 os.environ["BYPASS_TOOL_CONSENT"] = "true"
+import logging
 
+logging.basicConfig(level=logging.DEBUG)
 from strands import Agent
-
+from strands_tools import mem0_memory
 MODEL = "us.amazon.nova-pro-v1:0"
 
 
@@ -31,7 +33,15 @@ MODEL = "us.amazon.nova-pro-v1:0"
 # Hint: Agent(model=MODEL, tools=[mem0_memory], system_prompt="...")
 # System prompt should tell the agent to store and recall user preferences
 
-agent = None  # Replace this line
+agent = Agent(
+    model=MODEL,
+    tools=[mem0_memory],
+    system_prompt="""You are a helpful assistant with memory.
+Use the mem0_memory tool to:
+- STORE important things the user tells you about themselves
+- RETRIEVE relevant memories when answering questions
+Always check your memory before responding."""
+)
 
 
 # ============================================================
@@ -53,8 +63,8 @@ while True:
             break
 
         # TODO: Send user_input to the agent and print the response
-        # Hint: response = agent(user_input)
-        print("Agent: [TODO - call the agent here]")
+        response = agent(user_input)
+        print(f"Agent: {response}")
 
     except KeyboardInterrupt:
         print("\nBye! 👋")
